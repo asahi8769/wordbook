@@ -6,6 +6,8 @@ from scrape.scraper import WordChain
 class VocabDB:
     def __init__(self):
         self.db_name = 'db/VocabDB.db'
+
+    def __call__(self):
         self.create()
 
     def create(self):
@@ -51,12 +53,12 @@ class VocabDB:
             print(f"[-] Unique constraint violated [{args[0]}]")
             pass
 
-    def drop(self, word):
+    def drop(self, word, id_):
         with sqlite3.connect(self.db_name) as conn:
             cur = conn.cursor()
             cur.execute(
-                ''' DELETE from ENG where WORD = ? ''',
-                (word,)
+                ''' DELETE from ENG where WORD =? OR ID=? ''',
+                (word, id_,)
             )
             conn.commit()
 
