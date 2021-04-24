@@ -1,4 +1,6 @@
 import sqlite3
+from tqdm import tqdm
+from scrape.scraper import WordChain
 
 
 class VocabDB:
@@ -68,6 +70,46 @@ class VocabDB:
         except IndexError:
             return 0
 
+    def index_list(self):
+        with sqlite3.connect(self.db_name) as conn:
+            cur = conn.cursor()
+            query = ''' SELECT ID FROM ENG '''
+            cur.execute(query)
+            return [i[0] for i in cur.fetchall()]
+
+    def search(self, word=None, id_=None):
+        with sqlite3.connect(self.db_name) as conn:
+            cur = conn.cursor()
+            if word is not None:
+                assert id_ is None
+                query = ''' SELECT WORD, MEANING, POINTS, REPEATS FROM ENG WHERE WORD=? '''
+                cur.execute(query, (word,))
+            else :
+                assert id_ is not None
+                query = ''' SELECT WORD, MEANING, POINTS, REPEATS FROM ENG WHERE ID=? '''
+                cur.execute(query, (id_,))
+            conn.commit()
+            reference = cur.fetchone()
+
+        word = reference[0]
+        meaning = reference[1]
+        point = reference[2]
+        repeat = reference[3]
+        return word, meaning, point, repeat
+
+
+def populate_db(seed, search_related=True):
+    words = WordChain()
+    db = VocabDB()
+    meaning, related = words.search(seed)
+    db.insert(seed, meaning, ', '.join(related))
+
+    if search_related:
+        print('[+] Searching for related words')
+        for word in tqdm(related):
+            meaning_, related_ = words.search(word)
+            db.insert(word, meaning_, ', '.join(related_))
+
 
 if __name__ == "__main__":
     import os
@@ -84,6 +126,12 @@ if __name__ == "__main__":
     # db.drop('word')
     num = db.last_id()
     print(num)
+
+    id_list = db.index_list()
+    print(id_list)
+
+    a = db.search(id_=1)
+    print(a)
 
 
 
