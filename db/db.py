@@ -91,7 +91,7 @@ class VocabDB:
         repeat = reference[3]
         return word, meaning, point, repeat
 
-    def select_id_where(self, point=1, repeat=1):
+    def select_id_where(self, point=0, repeat=0):
         with sqlite3.connect (self.db_name) as conn:
             cur = conn.cursor ()
             query = ''' SELECT ID FROM ENG
@@ -99,7 +99,7 @@ class VocabDB:
             cur.execute (query, (point, repeat,))
             return [i[0] for i in cur.fetchall()]
 
-    def update_tick_right(self, word=None, id=None, point=0, repeat=0):
+    def update_tick(self, word=None, id=None, point=0, repeat=0):
         with sqlite3.connect(self.db_name) as conn:
             cur = conn.cursor()
             query = ''' UPDATE ENG 
@@ -142,13 +142,13 @@ if __name__ == "__main__":
     id_list = db.index_list()
     print(id_list)
 
-    a = db.search(id_=3, word=None)
+    a = db.search(id_=4, word=None)
     print(a)
 
-    ls = db.select_id_where(point=1)
+    ls = db.select_id_where(point=3)
     print(ls)
 
-    db.update_tick_right(word='erratic',id=None, point=1, repeat=0)
+    db.update_tick(word='erratic', id=None, point=1, repeat=0)
 
 
 
