@@ -80,14 +80,8 @@ class VocabDB:
     def search(self, word=None, id_=None):
         with sqlite3.connect(self.db_name) as conn:
             cur = conn.cursor()
-            if word is not None:
-                assert id_ is None
-                query = ''' SELECT WORD, MEANING, POINTS, REPEATS FROM ENG WHERE WORD=? '''
-                cur.execute(query, (word,))
-            else :
-                assert id_ is not None
-                query = ''' SELECT WORD, MEANING, POINTS, REPEATS FROM ENG WHERE ID=? '''
-                cur.execute(query, (id_,))
+            query = ''' SELECT WORD, MEANING, POINTS, REPEATS FROM ENG WHERE WORD=? OR ID=? '''
+            cur.execute(query, (word, id_,))
             conn.commit()
             reference = cur.fetchone()
 
@@ -96,6 +90,24 @@ class VocabDB:
         point = reference[2]
         repeat = reference[3]
         return word, meaning, point, repeat
+
+    def select_id_where(self, pt=1):
+        with sqlite3.connect (self.db_name) as conn:
+            cur = conn.cursor ()
+            query = ''' SELECT ID FROM ENG
+                        WHERE POINTS < ? OR REPEATS < ?'''
+            cur.execute (query, (pt, pt,))
+            return [i[0] for i in cur.fetchall()]
+
+    def update_tick_right(self, word=None, id=None, point=0, repeat=0):
+        with sqlite3.connect(self.db_name) as conn:
+            cur = conn.cursor()
+            query = ''' UPDATE ENG 
+                        SET POINTS = POINTS +?,
+                            REPEATS = REPEATS +?
+                        WHERE WORD=? OR ID=? '''
+            cur.execute(query, (point, repeat, word, id))
+            conn.commit()
 
 
 def populate_db(seed, search_related=True):
@@ -130,9 +142,13 @@ if __name__ == "__main__":
     id_list = db.index_list()
     print(id_list)
 
-    a = db.search(id_=1)
+    a = db.search(id_=3, word=None)
     print(a)
 
+    ls = db.select_id_where(pt=1)
+    print(ls)
+
+    db.update_tick_right(word='erratic',id=None, point=1, repeat=0)
 
 
 
