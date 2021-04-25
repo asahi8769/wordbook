@@ -32,12 +32,14 @@ def populate_db(seed, search_related=True):
 
 if __name__ == '__main__':
 
-    action = int(input("\nWhat do you want? 1. Quiz, 2. Search : "))
+    while True:
 
-    if action == 1:
-        problem(how_many=5)
+        action = int(input("\nWhat do you want? 1. Quiz, 2. Search : "))
 
-    if action == 2:
-        word = input("Which word? : ")
-        populate_db(word, search_related=True)
+        if action == 1:
+            problem(how_many=5)
+
+        if action == 2:
+            word = input("Which word? : ")
+            populate_db(word, search_related=True)
 
