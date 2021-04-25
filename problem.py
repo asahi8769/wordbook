@@ -19,7 +19,7 @@ class VocabProblem:
         while True:
             others = choices(id_list, k=4,  weights=[points[n] for n in range(len(id_list))])
             answer = choices(id_list, k=1, weights=[points[n] for n in range(len(id_list))])
-            if answer not in others and len(set(others)) == 4:
+            if answer[0] not in others and len(set(others)) == 4:
                 self.answer_key = answer[0]
                 break
 
@@ -37,7 +37,7 @@ class VocabProblem:
         return problem_dict
 
     def show(self, problem_dict):
-        print(f"What does '{problem_dict[self.answer_key]['word']}' means?\n")
+        print(f"\nWhat does '{problem_dict[self.answer_key]['word']}' means?\n")
         for n, key in enumerate(problem_dict.keys()):
             if key == self.answer_key:
                 self.answer_num = n+1
@@ -54,7 +54,7 @@ class VocabProblem:
             return True
 
         else:
-            self.db.update_tick(word=None, id_=self.answer_key, point=-2, repeat=0)
+            self.db.update_tick(word=None, id_=self.answer_key, point=-5, repeat=0)
             print(f"\nWrong! The right answer is {self.answer_num}\n")
             print(f"{problem_dict[self.answer_key]['word']} means: \n {problem_dict[self.answer_key]['meaning']}\n")
             for n, key in enumerate(problem_dict.keys()):

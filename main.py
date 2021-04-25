@@ -12,8 +12,9 @@ def problem(how_many=5):
         problem = probs.pull()
         problem_dict = probs.populate_problem(problem)
         probs.show(problem_dict)
-        scoring.append(int(probs.solve(problem_dict)*100/how_many))
-    print(scoring, sum(scoring))
+        scoring.append(int(int(probs.solve(problem_dict))*100/how_many))
+        n += 1
+    print("[+] Score :", sum(scoring))
 
 
 def populate_db(seed, search_related=True):
@@ -31,7 +32,7 @@ def populate_db(seed, search_related=True):
 
 if __name__ == '__main__':
 
-    action = int(input("What do you want? 1. Quiz, 2. Search : "))
+    action = int(input("\nWhat do you want? 1. Quiz, 2. Search : "))
 
     if action == 1:
         problem(how_many=5)
