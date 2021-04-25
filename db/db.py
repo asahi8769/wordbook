@@ -72,10 +72,10 @@ class VocabDB:
         except IndexError:
             return 0
 
-    def index_list(self):
+    def col_to_list(self, col):
         with sqlite3.connect(self.db_name) as conn:
             cur = conn.cursor()
-            query = ''' SELECT ID FROM ENG '''
+            query = f''' SELECT {col} FROM ENG '''
             cur.execute(query)
             return [i[0] for i in cur.fetchall()]
 
