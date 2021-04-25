@@ -101,28 +101,27 @@ class VocabDB:
             cur.execute (query, (point, repeat,))
             return [i[0] for i in cur.fetchall()]
 
-    def update_tick(self, word=None, id=None, point=0, repeat=0):
+    def update_tick(self, word=None, id_=None, point=0, repeat=0):
         with sqlite3.connect(self.db_name) as conn:
             cur = conn.cursor()
             query = ''' UPDATE ENG 
                         SET POINTS = POINTS +?,
                             REPEATS = REPEATS +?
                         WHERE WORD=? OR ID=? '''
-            cur.execute(query, (point, repeat, word, id))
+            cur.execute(query, (point, repeat, word, id_))
+            conn.commit()
+
+    def reset_tick(self):
+        with sqlite3.connect(self.db_name) as conn:
+            cur = conn.cursor()
+            query = ''' UPDATE ENG 
+                        SET POINTS = 0,
+                            REPEATS = 0 '''
+            cur.execute(query)
             conn.commit()
 
 
-def populate_db(seed, search_related=True):
-    words = WordChain()
-    db = VocabDB()
-    meaning, related = words.search(seed)
-    db.insert(seed, meaning, ', '.join(related))
 
-    if search_related:
-        print('[+] Searching for related words')
-        for word in tqdm(related):
-            meaning_, related_ = words.search(word)
-            db.insert(word, meaning_, ', '.join(related_))
 
 
 if __name__ == "__main__":
@@ -141,8 +140,8 @@ if __name__ == "__main__":
     num = db.last_id()
     print(num)
 
-    id_list = db.index_list()
-    print(id_list)
+    # id_list = db.index_list()
+    # print(id_list)
 
     a = db.search(id_=4, word=None)
     print(a)
@@ -150,8 +149,9 @@ if __name__ == "__main__":
     ls = db.select_id_where(point=3)
     print(ls)
 
-    db.update_tick(word='erratic', id=None, point=1, repeat=0)
+    # db.update_tick(word='erratic', id_=None, point=1, repeat=0)
 
+    db.reset_tick()
 
 
 
