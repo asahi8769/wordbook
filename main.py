@@ -8,6 +8,7 @@ def problem(how_many=5):
     n = 0
     scoring = []
     while n < how_many:
+        print(f"\n\n Problem no. {n+1}\n")
         probs = VocabProblem()
         problem = probs.pull()
         problem_dict = probs.populate_problem(problem)
