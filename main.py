@@ -17,7 +17,7 @@ def problem(how_many=5):
     print("[+] Score :", sum(scoring))
 
 
-def populate_db(seed, search_related=True):
+def populate_db(seed, search_related=True, max=20):
     words = WordChain()
     db = VocabDB()
     meaning, related = words.search(seed)
@@ -25,21 +25,29 @@ def populate_db(seed, search_related=True):
 
     if search_related:
         print('[+] Searching for related words')
-        for word in tqdm(related):
+        for word in tqdm(related[:max]):
             meaning_, related_ = words.search(word)
             db.insert(word, meaning_, ', '.join(related_))
 
 
 if __name__ == '__main__':
-
     while True:
 
-        action = int(input("\nWhat do you want? 1. Quiz, 2. Search : "))
+        action = int(input("\nWhat do you want? 1. Quiz, 2. Search  3. Setting: "))
 
         if action == 1:
             problem(how_many=5)
 
         if action == 2:
             word = input("Which word? : ")
-            populate_db(word, search_related=True)
+            populate_db(word, search_related=True, max=5)
 
+        if action == 3:
+            action = int(input("\nWhat do you want? 1. Reset Points, 2. Delete Table: "))
+            db = VocabDB()
+
+            if action == 1:
+                db.reset_tick()
+
+            if action == 2:
+                db.delete_()

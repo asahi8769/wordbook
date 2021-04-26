@@ -32,6 +32,12 @@ class VocabDB:
         except sqlite3.OperationalError:
             print(f'[-] DB already exists [{self.db_name}]')
 
+    def delete_(self):
+        with sqlite3.connect(self.db_name) as conn:
+            cur = conn.cursor()
+            cur.execute('DELETE FROM "ENG"')
+            conn.commit()
+
     def length(self):
         with sqlite3.connect(self.db_name) as conn:
             cur = conn.cursor()
@@ -40,18 +46,19 @@ class VocabDB:
             return cur.fetchone()[0]
 
     def insert(self, *args):
-        try :
-            with sqlite3.connect(self.db_name) as conn:
-                cur = conn.cursor()
-                cur.execute(
-                    ''' INSERT INTO ENG(WORD, MEANING, RELATED_WORDS)
-                                  VALUES(?,?,?) ''',
-                    args
-                )
-                conn.commit()
-        except sqlite3.IntegrityError:
-            print(f"[-] Unique constraint violated [{args[0]}]")
-            pass
+        if len(args[1])>0:
+            try :
+                with sqlite3.connect(self.db_name) as conn:
+                    cur = conn.cursor()
+                    cur.execute(
+                        ''' INSERT INTO ENG(WORD, MEANING, RELATED_WORDS)
+                                      VALUES(?,?,?) ''',
+                        args
+                    )
+                    conn.commit()
+            except sqlite3.IntegrityError:
+                print(f"[-] Unique constraint violated [{args[0]}]")
+                pass
 
     def drop(self, word, id_):
         with sqlite3.connect(self.db_name) as conn:
