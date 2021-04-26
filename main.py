@@ -22,6 +22,7 @@ def populate_db(seed, search_related=True, max=20):
     db = VocabDB()
     meaning, related = words.search(seed)
     db.insert(seed, meaning, ', '.join(related))
+    print(f"\n{seed} means :\n{meaning}\n")
 
     if search_related:
         print('[+] Searching for related words')
