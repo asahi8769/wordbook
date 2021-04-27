@@ -15,7 +15,8 @@ def problem(how_many=5):
         probs.show(problem_dict)
         scoring.append(int(int(probs.solve(problem_dict))*100/how_many))
         n += 1
-    print("[+] Score :", sum(scoring))
+    print("\n[+] Score :", sum(scoring))
+    print("\n===================================================\n")
 
 
 def populate_db(seed, search_related=True, max=20):
