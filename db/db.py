@@ -45,19 +45,20 @@ class VocabDB:
             cur.execute(query)
             return cur.fetchone()[0]
 
-    def insert(self, *args):
-        if len(args[1])>0:
+    def insert(self, word, meaning, related):
+        word = str(word).lower()
+        if len(meaning)>0:
             try :
                 with sqlite3.connect(self.db_name) as conn:
                     cur = conn.cursor()
                     cur.execute(
                         ''' INSERT INTO ENG(WORD, MEANING, RELATED_WORDS)
                                       VALUES(?,?,?) ''',
-                        args
+                        (word, meaning, related,)
                     )
                     conn.commit()
             except sqlite3.IntegrityError:
-                print(f"[-] Unique constraint violated [{args[0]}]")
+                print(f"[-] Unique constraint violated [{word}]")
                 pass
 
     def drop(self, word, id_):

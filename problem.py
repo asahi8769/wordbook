@@ -15,7 +15,10 @@ class VocabProblem:
         repeats = self.db.col_to_list('REPEATS')
         seq = [points[n]*0.6 + repeats[n]*0.4 for n in range(len(id_list))]
 
-        points = [1-(i/(np.sum(seq)+0.0001)) for i in seq]
+        max_ = max(seq)
+        min_ = min(seq)
+        points = [(i-min_)/(max_-min_) for i in seq]
+
         while True:
             others = choices(id_list, k=4,  weights=[points[n] for n in range(len(id_list))])
             answer = choices(id_list, k=1, weights=[points[n] for n in range(len(id_list))])
@@ -65,9 +68,9 @@ class VocabProblem:
 if __name__=='__main__':
     probs = VocabProblem()
     problem = probs.pull()
-    problem_dict = probs.populate_problem(problem)
-    probs.show(problem_dict)
-    probs.solve(problem_dict)
+    # problem_dict = probs.populate_problem(problem)
+    # probs.show(problem_dict)
+    # probs.solve(problem_dict)
 
 
 
