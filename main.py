@@ -2,6 +2,7 @@ from problem import VocabProblem
 from scrape.scraper import WordChain
 from db.db import VocabDB
 from tqdm import tqdm
+import time
 
 
 def problem(how_many=5):
@@ -16,6 +17,7 @@ def problem(how_many=5):
         scoring.append(int(int(probs.solve(problem_dict))*100/how_many))
         n += 1
     print("\n[+] Score :", sum(scoring))
+    time.sleep(3)
     print("\n===================================================\n")
 
 

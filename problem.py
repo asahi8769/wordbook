@@ -1,6 +1,6 @@
 from db.db import VocabDB
 from random import choices, shuffle
-import numpy as np
+import time
 
 
 class VocabProblem:
@@ -50,7 +50,8 @@ class VocabProblem:
         answer = int(input("\nYour answer? :"))
         if answer == self.answer_num:
             self.db.update_tick(word=None, id_=self.answer_key, point=1, repeat=1)
-            print("\nYou are right!\n")
+            print("\n[+] You are right!\n")
+            time.sleep(3)
             print(f"{problem_dict[self.answer_key]['word']} means: \n {problem_dict[self.answer_key]['meaning']}\n")
             for n, key in enumerate(problem_dict.keys()):
                 print(f" {n + 1}. {problem_dict[key]['word']} : {problem_dict[key]['meaning']}")
@@ -58,7 +59,8 @@ class VocabProblem:
 
         else:
             self.db.update_tick(word=None, id_=self.answer_key, point=-5, repeat=0)
-            print(f"\nWrong! The right answer is {self.answer_num}\n")
+            print(f"\n[-] Wrong! The right answer is {self.answer_num}\n")
+            time.sleep(3)
             print(f"{problem_dict[self.answer_key]['word']} means: \n {problem_dict[self.answer_key]['meaning']}\n")
             for n, key in enumerate(problem_dict.keys()):
                 print(f" {n + 1}. {problem_dict[key]['word']} : {problem_dict[key]['meaning']}")
