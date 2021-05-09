@@ -14,6 +14,7 @@ class VocabProblem:
         points = self.db.col_to_list('POINTS')
         repeats = self.db.col_to_list('REPEATS')
         seq = [points[n]*0.6 + repeats[n]*0.4 for n in range(len(id_list))]
+        print(seq)
 
         max_ = max(seq)
         min_ = min(seq)
