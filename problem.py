@@ -19,7 +19,7 @@ class VocabProblem:
         max_ = max(seq)
         min_ = min(seq)
         points = [(i-min_)/(max_-min_) for i in seq]
-        print(points)
+        # print(points)
 
         while True:
             others = choices(id_list, k=4,  weights=[points[n] for n in range(len(id_list))])
