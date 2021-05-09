@@ -13,12 +13,13 @@ class VocabProblem:
         id_list = self.db.col_to_list('ID')
         points = self.db.col_to_list('POINTS')
         repeats = self.db.col_to_list('REPEATS')
-        seq = [points[n]*0.6 + repeats[n]*0.4 for n in range(len(id_list))]
-        print(seq)
+        seq = [(-points[n]*0.6) + (-repeats[n]*0.4) for n in range(len(id_list))]
+
 
         max_ = max(seq)
         min_ = min(seq)
         points = [(i-min_)/(max_-min_) for i in seq]
+        print(points)
 
         while True:
             others = choices(id_list, k=4,  weights=[points[n] for n in range(len(id_list))])
@@ -59,7 +60,7 @@ class VocabProblem:
             return True
 
         else:
-            self.db.update_tick(word=None, id_=self.answer_key, point=-5, repeat=0)
+            self.db.update_tick(word=None, id_=self.answer_key, point=-10, repeat=1)
             print(f"\n[-] Wrong! The right answer is {self.answer_num}\n")
             time.sleep(3)
             print(f"{problem_dict[self.answer_key]['word']} means: \n {problem_dict[self.answer_key]['meaning']}\n")
