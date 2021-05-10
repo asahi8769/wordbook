@@ -42,7 +42,7 @@ class VocabProblem:
         return problem_dict
 
     def show(self, problem_dict):
-        print(f"\nWhat does '{problem_dict[self.answer_key]['word']}' means?\n")
+        print(f"\nWhat does '{problem_dict[self.answer_key]['word']}' mean?\n")
         for n, key in enumerate(problem_dict.keys()):
             if key == self.answer_key:
                 self.answer_num = n+1
